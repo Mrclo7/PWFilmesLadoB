@@ -20,32 +20,38 @@ namespace PWFilmes.API.Controllers
         [HttpGet("listar")]
         public IActionResult Listar()
         {
-            _context.CategoriaSet.ToList();
-
-            List<Categoria> categorias = new List<Categoria>();
-            categorias.Add(
-                new Categoria { Codigo = 1, Descricao = "Terror", Cor = "Vermelho" });
-
-            categorias.Add(
-                new Categoria { Codigo = 2, Descricao = "Suspense", Cor = "Azul" });
-
-            return Ok(categorias);
+              return Ok(_context.CategoriaSet.AsEnumerable());
+            //return Ok(_context.CategoriaSet.ToList());
         }
 
         [HttpGet("obter/{codigo}")]
         public IActionResult Obter(int codigo)
         {
-            List<Categoria> categorias = new List<Categoria>();
-            categorias.Add(
-                new Categoria { Codigo = 1, Descricao = "Terror", Cor = "Vermelho" });
+            return Ok(_context.CategoriaSet.Find(codigo));
+        }
 
-            categorias.Add(
-                new Categoria { Codigo = 2, Descricao = "Suspense", Cor = "Azul" });
+        [HttpPost("adicionar")]
+        public IActionResult Adicionar(Categoria categoria)
+        {
+            _context.CategoriaSet.Add(categoria);
+            _context.SaveChanges();
 
-            Categoria cat = 
-                categorias.FirstOrDefault(p => p.Codigo == codigo);
+            return Created("Created",
+               $"Categoria {categoria.Codigo} Adicionada com Sucesso");
 
-            return Ok(cat);
+        }
+        [HttpPut("Atualizar")]
+        public IActionResult Atualizar(Categoria categoria)
+        {
+            if (!_context.CategoriaSet.Any(p =>p.Codigo == categoria.Codigo))
+            {
+                _context.Attach(categoria);
+                _context.CategoriaSet.Update(categoria);
+                _context.SaveChanges();
+
+                return Ok($"Categoria {categoria.Codigo} não Localizada");
+            }
+                return BadRequest($"Categoria {categoria.Codigo} não Localizada");
         }
     }
 }
