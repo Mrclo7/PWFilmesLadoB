@@ -53,5 +53,17 @@ namespace PWFilmes.API.Controllers
             }
                 return BadRequest($"Categoria {categoria.Codigo} não Localizada");
         }
+        [HttpDelete("excluir/{codigo}")]
+        public IActionResult Excluir(int codigo)
+        {
+            var categoria = _context.CategoriaSet.Find(codigo);
+            if (categoria == null)
+                return BadRequest($"Categoria {codigo} não encontrada");
+
+            _context.CategoriaSet.Remove(categoria);
+            _context.SaveChanges();
+
+            return Ok($"Categoria {codigo} Removida com Sucesso.");
+        }
     }
 }
