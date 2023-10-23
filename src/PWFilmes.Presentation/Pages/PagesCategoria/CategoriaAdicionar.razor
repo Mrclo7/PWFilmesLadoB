@@ -1,0 +1,20 @@
+﻿@page "/categoria-nova"
+@using PWFilmes.Domain
+
+<h3>Nova Categoria</h3>
+
+<EditForm Model="categoriaModel" >
+    <RadzenRow>
+        <RadzenColumn Size="12" SizeMD="6" SizeLG="9">
+            <RadzenFormField Text="Descrição" Style="width: 100%;">
+                <RadzenTextBox
+                    Style="width: 100%;"/>
+            </RadzenFormField>
+        </RadzenColumn>
+    </RadzenRow>
+</EditForm>
+
+@code {
+    Categoria categoriaModel = new Categoria();
+
+}
