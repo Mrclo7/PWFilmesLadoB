@@ -3,15 +3,39 @@
 
 <h3>Nova Categoria</h3>
 
+
 <EditForm Model="categoriaModel" >
+    <DataAnnotationsValidator />
+    <ValidationSummary/>
     <RadzenRow>
         <RadzenColumn Size="12" SizeMD="6" SizeLG="9">
             <RadzenFormField Text="Descrição" Style="width: 100%;">
-                <RadzenTextBox
-                    Style="width: 100%;"/>
+                <RadzenTextBox Style="width: 100%;"
+                               @bind-Value="categoriaModel.Descricao"/>
             </RadzenFormField>
+            <ValidationMessage For=@(() => categoriaModel.Descricao) />
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+            <RadzenFormField Text="Cor" Style="width: 100%;">
+                <RadzenColorPicker Style="width: 100%;"
+                                   @bind-Value="categoriaModel.Cor"
+                                   ShowButton="true" />
+            </RadzenFormField>
+            <ValidationMessage For=@(() => categoriaModel.Cor) />
         </RadzenColumn>
     </RadzenRow>
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Style="width: 100%;" class="rz-mt-4"  >
+        <RadzenButton Icon="delete_forever"
+                      ButtonStyle="ButtonStyle.Danger"
+                      Text="Cancelar"
+                      class="rz-border-radius-10" />
+
+        <RadzenButton Icon="done"
+                      ButtonStyle="ButtonStyle.Success"
+                      Text="Confirmar"
+                      ButtonType="ButtonType.Submit"
+                      class="rz-border-radius-10" />
+    </RadzenStack>
 </EditForm>
 
 @code {
