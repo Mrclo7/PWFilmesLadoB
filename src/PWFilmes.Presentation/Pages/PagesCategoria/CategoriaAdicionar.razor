@@ -1,10 +1,13 @@
 ﻿@page "/categoria-nova"
 @using PWFilmes.Domain
+@using System.Net
 
 <h3>Nova Categoria</h3>
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
 
 
-<EditForm Model="categoriaModel" >
+<EditForm Model="categoriaModel" OnValidSubmit="Confirmar">
     <DataAnnotationsValidator />
     <ValidationSummary/>
     <RadzenRow>
@@ -24,21 +27,40 @@
             <ValidationMessage For=@(() => categoriaModel.Cor) />
         </RadzenColumn>
     </RadzenRow>
-    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Style="width: 100%;" class="rz-mt-4"  >
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Style="width: 100%;" class="rz-mt-4">
         <RadzenButton Icon="delete_forever"
                       ButtonStyle="ButtonStyle.Danger"
                       Text="Cancelar"
-                      class="rz-border-radius-10" />
-
+                      class="rz-border-radius-10" 
+                      Click="Cancelar" />
+       
         <RadzenButton Icon="done"
                       ButtonStyle="ButtonStyle.Success"
                       Text="Confirmar"
                       ButtonType="ButtonType.Submit"
                       class="rz-border-radius-10" />
+
     </RadzenStack>
 </EditForm>
 
 @code {
     Categoria categoriaModel = new Categoria();
+
+    private async void Confirmar()
+    {
+       JsonContent categoriaModelJson =
+            JsonContent.Create(categoriaModel);
+
+        HttpResponseMessage response = await Http
+            .PostAsync("api/Categoria/adicionar",
+            categoriaModelJson);
+
+        if (response.StatusCode == HttpStatusCode.Created)
+                NavigationManager.NavigateTo("categoria/listar");
+    }
+    private void Cancelar()
+        {
+            NavigationManager.NavigateTo("categoria/listar");
+        }
 
 }
