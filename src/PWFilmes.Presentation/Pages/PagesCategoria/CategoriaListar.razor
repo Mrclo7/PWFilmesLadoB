@@ -1,19 +1,21 @@
 ﻿@page "/categoria/listar"
 @inject HttpClient Http
 @inject NavigationManager  NavigationManager
+@inject DialogService DialogService
 
 @using System.Text.Json
 @using PWFilmes.Domain
 
 <h3>Categorias</h3>
 
+<RadzenDialog/>
+
 
 <RadzenButton Icon="add"
               ButtonStyle="ButtonStyle.Primary"
-              Text="Nova Categoria" 
+              Text="Nova Categoria"
               Click="NovaCategoria"
-              class="rz-mb-4 rz-border-radius-10"
-              />
+              class="rz-mb-4 rz-border-radius-10" />
 
 
 
@@ -38,13 +40,32 @@
                 <RadzenColorPicker @bind-Value=@data.Cor Style="width: 100%" Disabled />u
             </Template>
         </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="Categoria"
+                              Filterable="false"
+                              Sortable="false"
+                              Title="Ações"
+                              TextAlign="TextAlign.Center"
+                              Width="50px">
+            <Template Context="data">
+                <RadzenStack Orientation="Orientation.Horizontal"
+                             JustifyContent="JustifyContent.Center">
+                    <RadzenButton Icon="edit"
+                                  ButtonStyle="ButtonStyle.Primary"
+                                  Class="rz-border-radius-10" />
+                    <RadzenButton Icon="delete_forever"
+                                  ButtonStyle="ButtonStyle.Danger"
+                                  class="rz-border-radius-10" 
+                                  Click=" () => RemoverCategoria(data.Codigo)"/>
+                </RadzenStack>
+            </Template>
+        </RadzenDataGridColumn>
     </Columns>
 </RadzenDataGrid>
 
 @code {
-    List<Categoria> categorias = new List<Categoria>();
+        List<Categoria> categorias = new List<Categoria>();
 
-    protected override async Task OnInitializedAsync()
+protected override async Task OnInitializedAsync()
     {
         var response =
             await Http.GetAsync("api/Categoria/listar");
@@ -64,4 +85,21 @@
         NavigationManager.NavigateTo("categoria-nova");
     }
 
+    public async Task RemoverCategoria(int codigoCategoria)
+    {
+        var retorno = await
+            DialogService.Confirm($"Deseja excluir a categoria de código{ codigoCategoria}",
+            "PWFilmes",
+            new ConfirmOptions()
+            {
+
+                OkButtonText = "Sim",
+                CancelButtonText = "Não"
+
+            });
+        if (retorno is true)
+        {
+            await Http.DeleteAsync($"api/Categoria/excluir/{codigoCategoria}");
+        }
+    }
 }

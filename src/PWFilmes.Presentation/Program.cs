@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Radzen;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -22,6 +23,8 @@ namespace PWFilmes.Presentation
                   { BaseAddress = 
                      new Uri("https://localhost:44376")
                   });
+
+            builder.Services.AddScoped<DialogService>();
 
             await builder.Build().RunAsync();
         }
