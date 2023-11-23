@@ -51,7 +51,8 @@
                              JustifyContent="JustifyContent.Center">
                     <RadzenButton Icon="edit"
                                   ButtonStyle="ButtonStyle.Primary"
-                                  Class="rz-border-radius-10" />
+                                  Class="rz-border-radius-10" 
+                                  Click="EditarCategoria"/>
                     <RadzenButton Icon="delete_forever"
                                   ButtonStyle="ButtonStyle.Danger"
                                   class="rz-border-radius-10" 
@@ -63,9 +64,9 @@
 </RadzenDataGrid>
 
 @code {
-        List<Categoria> categorias = new List<Categoria>();
+    List<Categoria> categorias = new List<Categoria>();
 
-protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         var response =
             await Http.GetAsync("api/Categoria/listar");
@@ -85,6 +86,11 @@ protected override async Task OnInitializedAsync()
         NavigationManager.NavigateTo("categoria-nova");
     }
 
+    public void EditarCategoria()
+    {
+        NavigationManager.NavigateTo("categoria-editar");
+    }
+
     public async Task RemoverCategoria(int codigoCategoria)
     {
         var retorno = await
@@ -99,7 +105,9 @@ protected override async Task OnInitializedAsync()
             });
         if (retorno is true)
         {
-            await Http.DeleteAsync($"api/Categoria/excluir/{codigoCategoria}");
+            var response = await Http.DeleteAsync($"api/Categoria/excluir/{codigoCategoria}");
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                await OnInitializedAsync();
         }
     }
 }
