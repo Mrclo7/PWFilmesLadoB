@@ -52,7 +52,7 @@
                     <RadzenButton Icon="edit"
                                   ButtonStyle="ButtonStyle.Primary"
                                   Class="rz-border-radius-10" 
-                                  Click="EditarCategoria"/>
+                                  Click= "() => EditarCategoria(data.Codigo)"/>
                     <RadzenButton Icon="delete_forever"
                                   ButtonStyle="ButtonStyle.Danger"
                                   class="rz-border-radius-10" 
@@ -86,9 +86,9 @@
         NavigationManager.NavigateTo("categoria-nova");
     }
 
-    public void EditarCategoria()
+    public void EditarCategoria(int codigoCategoria)
     {
-        NavigationManager.NavigateTo("categoria-editar");
+        NavigationManager.NavigateTo($"categoria-editar/{codigoCategoria}");
     }
 
     public async Task RemoverCategoria(int codigoCategoria)
