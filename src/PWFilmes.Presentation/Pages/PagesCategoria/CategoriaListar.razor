@@ -35,9 +35,9 @@
     <Columns>
         <RadzenDataGridColumn TItem="Categoria" Property="Codigo" Title="Código" Width="100px" />
         <RadzenDataGridColumn TItem="Categoria" Property="Descricao" Title="Descrição" />
-        <RadzenDataGridColumn TItem="Categoria" Property="Cor" Title="Cor" Width="80px">
+        <RadzenDataGridColumn TItem="Categoria" Property="Cor" Title="Cor" Width="80px"Filterable="false" Sortable="false">
             <Template Context="data">
-                <RadzenColorPicker @bind-Value=@data.Cor Style="width: 100%" Disabled />u
+                <RadzenColorPicker @bind-Value=@data.Cor Style="width: 100%" Disabled />
             </Template>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn TItem="Categoria"

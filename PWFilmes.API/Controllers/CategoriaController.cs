@@ -43,7 +43,7 @@ namespace PWFilmes.API.Controllers
         [HttpPut("Atualizar")]
         public IActionResult Atualizar(Categoria categoria)
         {
-            if (!_context.CategoriaSet.Any(p =>p.Codigo == categoria.Codigo))
+            if (_context.CategoriaSet.Any(p =>p.Codigo == categoria.Codigo))
             {
                 _context.Attach(categoria);
                 _context.CategoriaSet.Update(categoria);
@@ -51,7 +51,8 @@ namespace PWFilmes.API.Controllers
 
                 return Ok($"Categoria {categoria.Codigo} não Localizada");
             }
-                return BadRequest($"Categoria {categoria.Codigo} não Localizada");
+                
+            return BadRequest($"Categoria {categoria.Codigo} não Localizada");
         }
         [HttpDelete("excluir/{codigo}")]
         public IActionResult Excluir(int codigo)
